@@ -78,12 +78,13 @@ def signup():
 @cross_origin(supports_credentials=True)
 def login():
     try:
-        data = request.get_json()        
+        data = request.get_json()
+        username = data.get('username')
         email = data.get('email')
         password = data.get('password')
         role = data.get('role')
 
-        if not email or not password or not role:
+        if not username or not email or not password or not role:
             return jsonify({'status': False, 'msg': 'Incomplete data provided'}), 400
 
         collection = admin_collection if role == "admin" else patient_collection

@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { loginRoute } from '../utils/APIRoutes'
 
 const Login = ({ onLogin }) => {
+   const [username, setUsername] = useState('')
    const [email, setEmail] = useState('')
    const [password, setPassword] = useState('')
    const [role, setRole] = useState('patient')
@@ -14,8 +15,11 @@ const Login = ({ onLogin }) => {
 
    useEffect(() => {
       const storedRole = localStorage.getItem('userRole')
-      if (storedRole) {
+      const storedName = localStorage.getItem('userName')
+
+      if (storedRole && storedName) {
          setRole(storedRole)
+         setUsername(storedName)
       }
    }, [])
 
@@ -23,6 +27,7 @@ const Login = ({ onLogin }) => {
       try {
          setLoading(true)
          const response = await axios.post(loginRoute, {
+            username,
             email,
             password,
             role,
@@ -32,7 +37,7 @@ const Login = ({ onLogin }) => {
             setMessage('Login successful')
             localStorage.setItem('isLoggedIn', 'true')
             localStorage.setItem('userRole', role)
-
+            localStorage.setItem('userName', username)
             onLogin() // Notify the parent component about the successful login
             if (role === 'admin') {
                navigate('/admin-dashboard')
@@ -52,6 +57,16 @@ const Login = ({ onLogin }) => {
       <Container>
          <LoginForm>
             <h1>Login</h1>
+            <InputGroup>
+               <label>Username:</label>
+               <Input
+                  type="text"
+                  placeholder="Username"
+                  name="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+               />
+            </InputGroup>
             <InputGroup>
                <label>Email:</label>
                <Input
