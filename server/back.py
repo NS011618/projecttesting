@@ -6,7 +6,6 @@ from flask_cors import CORS,cross_origin
 from flask_mail import Mail, Message
 
 
-
 # Import the required libraries for machine learning
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -18,6 +17,10 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import cross_val_score
 import numpy as np
 import pandas as pd
+
+
+from transformers import pipeline
+import requests
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
@@ -193,7 +196,7 @@ def predict_disease_flask():
                    'Urinary tract infection', 'Psoriasis', 'Impetigo']'''
 
         # Load training data
-        train_data = pd.read_csv(r"C:\Users\NANIS\OneDrive\Desktop\testingproject\server\Training_Predict.csv")
+        train_data = pd.read_csv(r"C:\Users\OS23H\OneDrive\Desktop\testingproject\server\Training_Predict.csv")
 
         df = pd.DataFrame(train_data)
 
@@ -223,7 +226,7 @@ def predict_disease_flask():
         accuracy = accuracy_score(y_test, y_pred)
    
 
-        test_data = pd.read_csv(r"C:\Users\NANIS\OneDrive\Desktop\testingproject\server\Testing_Predict.csv")
+        test_data = pd.read_csv(r"C:\Users\OS23H\OneDrive\Desktop\testingproject\server\Testing_Predict.csv")
         
         testx=test_data[cols]
         testy=test_data['prognosis']
@@ -312,6 +315,106 @@ def get_past_history():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+
+@app.route('/gettotalpatients', methods=['GET'])
+@cross_origin(supports_credentials=True)
+def get_total_patients():
+    try:
+        # Count the total number of documents in the 'prole' collection
+        total_patients = patient_collection.count_documents({})
+
+        return jsonify({'total_patients': total_patients}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+'''*************************************** Predict Disease and Generate Suggestions ***********************************************'''
+
+def extract_data(generated_text):
+    # Split the generated text into lines
+    lines = generated_text.split('\n')
+
+    # Placeholder values
+    medication = ""
+    nutrient_diet = ""
+
+    # Search for markers indicating medication and nutrient diet
+    for line in lines:
+        if "Medication:" in line:
+            medication = line.replace("Medication:", "").strip()
+        elif "Nutrient Diet:" in line:
+            nutrient_diet = line.replace("Nutrient Diet:", "").strip()
+
+    return medication, nutrient_diet
+
+'''@app.route('/predictandsuggest', methods=['POST'])
+def predict_and_suggest():
+    try:
+        data = request.get_json()
+        symptoms = data.get('symptoms', [])
+        disease = data.get('disease', '')
+
+        # Generate suggestions using Hugging Face's Transformers library
+        prompt = f"Given the symptoms: {', '.join(symptoms)} and the disease: {disease}, suggest medication and nutrient diet."
+
+        # Use a pre-trained model (e.g., GPT-2) for text completion
+        generator = pipeline('text-generation', model='gpt2')
+
+        generated_text = generator(prompt, max_length=150, temperature=0.7, num_return_sequences=1, truncation=True)[0]['generated_text']
+        
+        # Extract medication and nutrient data from the generated text
+        #medication, nutrient_diet = extract_data(generated_text)
+
+        # result = {
+        #    'medication': medication,
+          #  'nutrient_diet': nutrient_diet
+        #}
+        result=generated_text
+        return jsonify(result), 200
+
+    except Exception as e:
+        # Log the error for debugging
+        print("Error:", str(e))
+        return jsonify({'error': f'Internal Server Error: {str(e)}'}), 500'''
+
+
+import openai
+
+# Set your OpenAI GPT-3 API key
+openai.api_key = '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'
+
+@app.route('/predictandsuggest', methods=['POST'])
+def predict_and_suggest():
+    try:
+        data = request.get_json()
+        symptoms = data.get('symptoms', [])
+        disease = data.get('disease', '')
+
+        # Generate suggestions using OpenAI's GPT-3
+        prompt = f"Given the symptoms: {', '.join(symptoms)} and the disease: {disease}, suggest medication and nutrient diet."
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo-0125",  # Use the latest GPT-3 engine
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": prompt}
+            ]
+        )
+        print(response)
+
+        generated_text = response['choices'][0]['message']['content']
+
+        result = {
+            'generated_text': generated_text
+        }
+
+        return jsonify(result), 200
+
+    except Exception as e:
+        # Log the error for debugging
+        print("Error:", str(e))
+        return jsonify({'error': f'Internal Server Error: {str(e)}'}), 500
 
 
 if __name__ == '__main__':
