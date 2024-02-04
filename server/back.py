@@ -5,6 +5,12 @@ import bcrypt
 from flask_cors import CORS,cross_origin
 from flask_mail import Mail, Message
 
+# using dotenv to load environment variables from a .env file
+from dotenv import load_dotenv
+load_dotenv()
+
+import os
+
 
 # Import the required libraries for machine learning
 from sklearn.model_selection import train_test_split
@@ -383,7 +389,7 @@ def predict_and_suggest():
 import openai
 
 # Set your OpenAI GPT-3 API key
-openai.api_key = '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'
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
 @app.route('/predictandsuggest', methods=['POST'])
 def predict_and_suggest():
@@ -401,8 +407,7 @@ def predict_and_suggest():
                 {"role": "user", "content": prompt}
             ]
         )
-        print(response)
-
+        
         generated_text = response['choices'][0]['message']['content']
 
         result = {
