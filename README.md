@@ -10,6 +10,8 @@
 - Implementing contact functionality (using mailhog to communicate)
 - Added sypmtoms data set and also disease dataset in mongodb 
 - Adding Machine learning model(decision tree model) and predicting the disease
+- Suggesting Medcines and Nutrient Diet (May have some improvements)
+- Updating Admin Dashboard (still in progress)
 ## Team members:
 - Sathvik Bandru
 - Ashish Golla
