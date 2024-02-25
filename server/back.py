@@ -338,7 +338,7 @@ def get_total_patients():
 
 '''*************************************** Predict Disease and Generate Suggestions ***********************************************'''
 
-def extract_data(generated_text):
+'''def extract_data(generated_text):
     # Split the generated text into lines
     lines = generated_text.split('\n')
 
@@ -355,7 +355,7 @@ def extract_data(generated_text):
 
     return medication, nutrient_diet
 
-'''@app.route('/predictandsuggest', methods=['POST'])
+@app.route('/predictandsuggest', methods=['POST'])
 def predict_and_suggest():
     try:
         data = request.get_json()
