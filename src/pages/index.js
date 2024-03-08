@@ -5,6 +5,8 @@ import Register from "./Register";
 import Patientdashboard from "./Patientdashboard";
 import Inputdat from "./Inputdat";
 import Admindashboard from "./Admindashboard ";
+import Profile from "./PatProfile";
+
 
 export {
   About,
@@ -14,4 +16,5 @@ export {
   Patientdashboard,
   Inputdat,
   Admindashboard,
+  Profile  
 };

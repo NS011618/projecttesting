@@ -11,8 +11,8 @@ function About() {
    ];
 
    return (
-      <div className="bg-gradient-to-r from-orange-400 from-10% via-sky-300 via-30% to-emerald-500 to-90% shadow-md p-8 flex flex-wrap items-center">
-         <div className="w-full md:w-1/3 mb-8 md:mb-0 md:pr-4">
+      <div className="flex bg-gradient-to-r from-orange-400 from-10% via-sky-300 via-30% to-emerald-500 to-80% shadow-md p-8 mt-14 ml-6 mr-6   rounded-lg items-center">
+         <div className="w-full md:w-1/4 mb-8 md:mb-0 md:pr-4">
             <img
                src={aboutImage}
                alt="About Us"
@@ -30,7 +30,7 @@ function About() {
             ))}
             <div className="mt-8 text-center">
                <p className="text-sm text-gray-500">
-                  For more information, contact us at example@gmail.com
+                  For more information, contact us at <a href="mailto:patienthealthhistory@gmail.com" className="text-blue-500 hover:underline">patienthealthhistory@gmail.com</a>
                </p>
             </div>
          </div>
