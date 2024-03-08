@@ -35,7 +35,7 @@ function App() {
       if (dropdownVisible) {
          const timeoutId = setTimeout(() => {
             setDropdownVisible(false);
-         }, 1000); // Set the timeout to 1 seconds
+         }, 2000); // Set the timeout to 2 seconds
 
          return () => clearTimeout(timeoutId); // Cleanup function to clear the timeout
       }
@@ -69,7 +69,7 @@ function App() {
 
    return (
       <BrowserRouter>
-         <header className="w-full flex justify-between sm:px-8 px-5 py-4 border-b border-b-[#e6ebf4] bg-gradient-to-r from-orange-400 from-10% via-sky-300 via-30% to-yellow-200 to-90%">
+         <header className="w-full flex justify-between sm:px-8 px-5 py-4 border-b border-b-[#e6ebf4] bg-teal-600/35 shadow-lg">
             <h3
                to=""
                className="w-96 text-xl font-semibold object-contain font-inter bg-white p-3 shadow-md  text-black px-4 py-2 rounded-md"
