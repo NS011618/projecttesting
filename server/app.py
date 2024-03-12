@@ -93,7 +93,7 @@ def login():
         password = data.get('password')
         role = data.get('role')
 
-        if not username or not email or not password or not role:
+        if not email or not password or not role:
             return jsonify({'status': False, 'msg': 'Incomplete data provided'}), 400
 
         collection = admin_collection if role == "admin" else patient_collection
@@ -150,7 +150,7 @@ def receive_and_save_data():
         
         return jsonify({'message': 'Data received and saved successfully'}), 200
     except Exception as e:
-        return jsonify({'message': f'Error: {str(e)}'}), 500
+        return jsonify({'message': f'Error: {str(e)}'}), 500 
 
 '''*****************************************************Contact us Code**************************************************************************'''
 @app.route('/contact', methods=['POST'])
@@ -420,6 +420,43 @@ def predict_and_suggest():
         # Log the error for debugging
         print("Error:", str(e))
         return jsonify({'error': f'Internal Server Error: {str(e)}'}), 500
+
+'''********************** Patient Profile *******************************'''
+@app.route('/records', methods=['GET'])
+def records():
+    try:
+        username = request.args.get('username')
+        print(username)
+
+        if not username:
+            return jsonify({'error': 'Username not provided'}), 400
+
+        # Assuming you have a field 'Name' in the collection to match with the username
+        user_data = patient_data.find_one({'Name': username})
+
+        if not user_data:
+            return jsonify({'error': 'User not found'}), 404
+
+        # Extract and return patient profile data
+        records = {
+            'Sno': user_data.get('Sno'),
+            'Name': user_data.get('Name'),
+            'Age': user_data.get('Age'),
+            'Sex': user_data.get('Sex'),
+            'Dates': user_data.get('Dates'),
+            'Description': user_data.get('Description'),
+            'Medical_specialty': user_data.get('Medical_specialty'),
+            'Sample_name': user_data.get('Sample_name'),
+            'Transcription': user_data.get('Transcription'),
+            'Keywords': user_data.get('Keywords')
+            # Add more fields as needed
+        }
+
+        return jsonify(records), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 
 if __name__ == '__main__':

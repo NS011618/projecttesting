@@ -2,7 +2,15 @@
 /* eslint-disable no-unused-vars */
 import './App.css'
 import React, { useEffect, useState } from 'react'
-import { BrowserRouter, Link, Route, Routes, Outlet, Navigate } from 'react-router-dom'
+import {
+   BrowserRouter,
+   Link,
+   Route,
+   Routes,
+   Outlet,
+   Navigate,
+   useNavigate,
+} from 'react-router-dom'
 import {
    About,
    Contact,
@@ -17,10 +25,42 @@ import useLocalStorageState from 'use-local-storage-state'
 import { IoPersonCircleSharp } from 'react-icons/io5'
 
 function App() {
+   return (
+      <BrowserRouter>
+         <MainComponent />
+      </BrowserRouter>
+   )
+}
+
+function MainComponent() {
    const [isLoggedIn, setIsLoggedIn] = useLocalStorageState(false)
    const [role, setRole] = useState('patient')
    const [username, setUsername] = useState(null)
    const [dropdownVisible, setDropdownVisible] = useState(false)
+
+   const navigate = useNavigate()
+
+   useEffect(() => {
+      const storedLoginStatus = localStorage.getItem('isLoggedIn')
+      const storedRole = localStorage.getItem('userRole')
+      const storedName = localStorage.getItem('userName')
+
+      if (storedLoginStatus === 'true') {
+         setIsLoggedIn(true)
+         setRole(storedRole)
+         setUsername(storedName)
+      }
+   }, [])
+
+   useEffect(() => {
+      if (isLoggedIn && window.performance && window.performance.navigation.type !== window.performance.navigation.TYPE_RELOAD) {
+         if (role === 'admin') navigate('/admin-dashboard')
+         else navigate('/patient-dashboard')
+      } else if (!isLoggedIn && window.performance && window.performance.navigation.type !== window.performance.navigation.TYPE_RELOAD) {
+         navigate('/login-page')
+      }
+}, [isLoggedIn])
+
 
    useEffect(() => {
       const checkLoginStatus = () => {
@@ -34,12 +74,12 @@ function App() {
    useEffect(() => {
       if (dropdownVisible) {
          const timeoutId = setTimeout(() => {
-            setDropdownVisible(false);
-         }, 2000); // Set the timeout to 2 seconds
+            setDropdownVisible(false) // Hide the dropdown after 2 seconds
+         }, 2000) // Set the timeout to 2 seconds
 
-         return () => clearTimeout(timeoutId); // Cleanup function to clear the timeout
+         return () => clearTimeout(timeoutId) // Cleanup function to clear the timeout
       }
-   }, [dropdownVisible]);
+   }, [dropdownVisible])
 
    useEffect(() => {
       const storedRole = localStorage.getItem('userRole')
@@ -58,17 +98,17 @@ function App() {
 
    const handleLogout = () => {
       localStorage.setItem('isLoggedIn', 'false')
-      localStorage.setItem('role', 'patient')
-      localStorage.setItem('username', null)
+      localStorage.removeItem('userRole')
+      localStorage.removeItem('userName')
       setIsLoggedIn(false)
    }
 
    const toggleDropdown = () => {
       setDropdownVisible(!dropdownVisible)
    }
-
+   
    return (
-      <BrowserRouter>
+      <>
          <header className="w-full flex justify-between sm:px-8 px-5 py-4 border-b border-b-[#e6ebf4] bg-teal-600/35 shadow-lg">
             <h3
                to=""
@@ -121,7 +161,7 @@ function App() {
                                           to="/profile-page"
                                           className="block px-4 py-3 text-md text-gray-700 hover:bg-gray-100"
                                        >
-                                          My Profile 
+                                          My Profile
                                        </Link>
                                        <Link
                                           to="/input-data"
@@ -203,7 +243,7 @@ function App() {
             </Routes>
             <Outlet />
          </main>
-      </BrowserRouter>
+      </>
    )
 }
 

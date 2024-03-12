@@ -56,17 +56,7 @@ const Login = ({ onLogin }) => {
    return (
       <Container>
          <LoginForm>
-            <h1>Login</h1>
-            <InputGroup>
-               <label>Username:</label>
-               <Input
-                  type="text"
-                  placeholder="Username"
-                  name="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-               />
-            </InputGroup>
+            <h1>Login</h1>            
             <InputGroup>
                <label>Email:</label>
                <Input
@@ -77,7 +67,6 @@ const Login = ({ onLogin }) => {
                   onChange={(e) => setEmail(e.target.value)}
                />
             </InputGroup>
-
             <InputGroup>
                <label>Password:</label>
                <Input
@@ -99,7 +88,7 @@ const Login = ({ onLogin }) => {
                {loading ? 'Logging in...' : 'Log In'}
             </Button>
             {message && <Message>{message}</Message>}
-            <Link to="/">Don't have an account? Register</Link>
+            <Link to="/">Don't have an account? <span className='text-blue-500'>Register</span></Link>
          </LoginForm>
       </Container>
    )
@@ -109,7 +98,7 @@ const Container = styled.div`
    display: flex;
    justify-content: center;
    align-items: center;
-   height: 100vh;
+   height: 80vh;
 `
 
 const LoginForm = styled.div`

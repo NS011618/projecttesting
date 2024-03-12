@@ -9,34 +9,29 @@ import { Link } from 'react-router-dom'
 import { TiArrowSortedUp, TiArrowSortedDown } from 'react-icons/ti'
 
 const PatientDashboard = () => {
-   {
-      /* State to manage the sections */
-   }
+   /* State to manage the sections */
+
    const [activeSection, setActiveSection] = useState('selectSymptoms')
 
-   {
-      /* State to manage the list of symptoms, selected symptoms and manage the loading and error status of symptoms */
-   }
+   /* State to manage the list of symptoms, selected symptoms and manage the loading and error status of symptoms */
+
    const [symptomsList, setSymptomsList] = useState([])
    const [selectedSymptoms, setSelectedSymptoms] = useState([])
    const [symptomsLoaded, setSymptomsLoaded] = useState(false)
    const [symptomsError, setSymptomsError] = useState(null)
 
-   {
-      /* State to manage the prediction error, predicted disease */
-   }
+   /* State to manage the prediction error, predicted disease */
+
    const [predictionError, setPredictionError] = useState(null)
    const [predictedDisease, setPredictedDisease] = useState('')
 
-   {
-      /* State to manage the accuracy, and algorithm */
-   }
+   /* State to manage the accuracy, and algorithm */
+
    const [accuracy, setAccuracy] = useState(null)
    const [algorithm, setAlgorithm] = useState('DecisionTree')
 
-   {
-      /* State to manage the search term for filtering symptoms */
-   }
+   /* State to manage the search term for filtering symptoms */
+
    const [searchTerm, setSearchTerm] = useState('')
    const [pasthistory, setPastHistory] = useState(null)
    const [Suggestion, setSuggestion] = useState('')
@@ -200,7 +195,6 @@ const PatientDashboard = () => {
          <div className="flex flex-row justify-between p-4">
             <div className="flex flex-row  ml-8 w-5/5 ">
                {activeSection === 'selectSymptoms' && (
-                  // Select Symptoms Component
                   <>
                      <div className="flex  flex-col w-1/3  bg-purple-300/10 p-6 rounded-lg shadow-md ">
                         <div className="mt-4">
@@ -360,7 +354,6 @@ const PatientDashboard = () => {
             </div>
 
             {activeSection === 'medicationNutrient' && (
-               // Medication & Nutrient Suggestions Component
                <div className="flex flex-col w-full mr-7 max-h-80 bg-purple-300/10 p-6 rounded-lg shadow-md ">
                   <h2 className="text-xl font-bold mb-2 text-gray-800">
                      Medication and Nutrient Suggestions
