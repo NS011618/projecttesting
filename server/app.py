@@ -5,6 +5,7 @@ import bcrypt
 from flask_cors import CORS,cross_origin
 from flask_mail import Mail, Message
 
+# using dotenv to load environment variables from a .env file
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -22,7 +23,6 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import cross_val_score
 import numpy as np
 import pandas as pd
-
 
 
 app = Flask(__name__)
