@@ -88,7 +88,7 @@ def signup():
 def login():
     try:
         data = request.get_json()
-        username = data.get('username')
+        
         email = data.get('email')
         password = data.get('password')
         role = data.get('role')
@@ -102,7 +102,7 @@ def login():
 
         if user and bcrypt.checkpw(password.encode('utf-8'), user['password']):
            
-            return jsonify({'status': True, 'msg': 'Login successful'}), 200
+            return jsonify({'status': True, 'msg': 'Login successful','username':user['username']}), 200
             
         else:
             return jsonify({'status': False, 'msg': 'Invalid email or password'}), 401
@@ -143,14 +143,16 @@ def receive_and_save_data():
             # Check if a record with the same "Sno" already exists in the database
             existing_record = collection.find_one({"Sno": record["Sno"]})
             if existing_record:
-                return jsonify({'message': f'Duplicate record with Sno {record["Sno"]} exists'}), 400
-
-        # Insert the received data into the MongoDB collection
-        result = collection.insert_many(data[1])
+                # Update the existing record
+                collection.update_one({"Sno": record["Sno"]}, {"$set": record})
+            else:
+                # Insert the record if it doesn't exist
+                collection.insert_one(record)
         
         return jsonify({'message': 'Data received and saved successfully'}), 200
     except Exception as e:
-        return jsonify({'message': f'Error: {str(e)}'}), 500 
+        return jsonify({'message': f'Error: {str(e)}'}), 500
+
 
 '''*****************************************************Contact us Code**************************************************************************'''
 @app.route('/contact', methods=['POST'])
@@ -421,44 +423,8 @@ def predict_and_suggest():
         print("Error:", str(e))
         return jsonify({'error': f'Internal Server Error: {str(e)}'}), 500
 
-'''********************** Patient Profile *******************************'''
-@app.route('/records', methods=['GET'])
-def records():
-    try:
-        username = request.args.get('username')
-        print(username)
 
-        if not username:
-            return jsonify({'error': 'Username not provided'}), 400
-
-        # Assuming you have a field 'Name' in the collection to match with the username
-        user_data = patient_data.find_one({'Name': username})
-
-        if not user_data:
-            return jsonify({'error': 'User not found'}), 404
-
-        # Extract and return patient profile data
-        records = {
-            'Sno': user_data.get('Sno'),
-            'Name': user_data.get('Name'),
-            'Age': user_data.get('Age'),
-            'Sex': user_data.get('Sex'),
-            'Dates': user_data.get('Dates'),
-            'Description': user_data.get('Description'),
-            'Medical_specialty': user_data.get('Medical_specialty'),
-            'Sample_name': user_data.get('Sample_name'),
-            'Transcription': user_data.get('Transcription'),
-            'Keywords': user_data.get('Keywords')
-            # Add more fields as needed
-        }
-
-        return jsonify(records), 200
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-
-
+    
 if __name__ == '__main__':
     app.run(debug=True)
 

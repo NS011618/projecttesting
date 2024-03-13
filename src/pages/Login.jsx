@@ -26,18 +26,18 @@ const Login = ({ onLogin }) => {
    const handleLogin = async () => {
       try {
          setLoading(true)
-         const response = await axios.post(loginRoute, {
-            username,
+         const response = await axios.post(loginRoute, {       
             email,
             password,
             role,
          })
+         console.log(response.data.username)
 
          if (response.status === 200) {
             setMessage('Login successful')
             localStorage.setItem('isLoggedIn', 'true')
             localStorage.setItem('userRole', role)
-            localStorage.setItem('userName', username)
+            localStorage.setItem('userName', response.data.username)
             onLogin() // Notify the parent component about the successful login
             if (role === 'admin') {
                navigate('/admin-dashboard')
@@ -56,7 +56,7 @@ const Login = ({ onLogin }) => {
    return (
       <Container>
          <LoginForm>
-            <h1>Login</h1>            
+            <h1>Login</h1>        
             <InputGroup>
                <label>Email:</label>
                <Input

@@ -152,7 +152,7 @@ function MainComponent() {
                         {dropdownVisible && (
                            <div
                               id="userDropdown"
-                              className="absolute right-0 mt-2 p-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100"
+                              className="absolute z-10 right-0 mt-2 p-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 divide-y divide-gray-100"
                            >
                               <div className="py-1">
                                  {role === 'patient' && (
@@ -170,7 +170,7 @@ function MainComponent() {
                                           Input Data
                                        </Link>
                                     </>
-                                 )}
+                                 )}                               
 
                                  <button
                                     onClick={handleLogout}

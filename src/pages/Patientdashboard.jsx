@@ -11,6 +11,9 @@ import { TiArrowSortedUp, TiArrowSortedDown } from 'react-icons/ti'
 const PatientDashboard = () => {
    /* State to manage the sections */
 
+   const [username, setUsername] = useState(null);   
+   
+
    const [activeSection, setActiveSection] = useState('selectSymptoms')
 
    /* State to manage the list of symptoms, selected symptoms and manage the loading and error status of symptoms */
@@ -38,7 +41,22 @@ const PatientDashboard = () => {
    const algorithmOptions = ['DecisionTree']
 
    useEffect(() => {
+      const fetchUser = async () => {
+         const storedName = localStorage.getItem('userName')        
+         if (storedName) {
+            setUsername(storedName)
+         }
+      }
+      fetchUser();
+   }, [])
+
+   
+   useEffect(() => {
       const fetchSymptoms = async () => {
+         const storedName = localStorage.getItem('userName')         
+         if (storedName) {            
+            setUsername(storedName);
+         }        
          try {
             const response = await fetch(getSymptomsRoute, {
                method: 'GET',
@@ -354,7 +372,7 @@ const PatientDashboard = () => {
             </div>
 
             {activeSection === 'medicationNutrient' && (
-               <div className="flex flex-col w-full mr-7 max-h-80 bg-purple-300/10 p-6 rounded-lg shadow-md ">
+               <div className="flex flex-col w-full mr-7  bg-purple-300/10 p-6 rounded-lg shadow-md ">
                   <h2 className="text-xl font-bold mb-2 text-gray-800">
                      Medication and Nutrient Suggestions
                   </h2>
