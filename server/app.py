@@ -5,7 +5,6 @@ import bcrypt
 from flask_cors import CORS,cross_origin
 from flask_mail import Mail, Message
 
-# using dotenv to load environment variables from a .env file
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -25,8 +24,6 @@ import numpy as np
 import pandas as pd
 
 
-from transformers import pipeline
-import requests
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
@@ -232,7 +229,7 @@ def predict_disease_flask():
         accuracy = accuracy_score(y_test, y_pred)
    
 
-        test_data = pd.read_csv(y"Testing_Predict.csv")
+        test_data = pd.read_csv("Testing_Predict.csv")
         
         testx=test_data[cols]
         testy=test_data['prognosis']
