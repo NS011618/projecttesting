@@ -25,6 +25,9 @@ import numpy as np
 import pandas as pd
 
 
+from transformers import pipeline
+import requests
+
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
