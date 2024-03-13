@@ -10,7 +10,3 @@ mtsamples
 .env.production.local
 
 server/*.env
-server/*Lib
-server/Include
-server/Scripts
-server/pyvenv.cfg
