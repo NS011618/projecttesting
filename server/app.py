@@ -61,6 +61,7 @@ def signup():
         password = data.get('password')
         confirmPassword = data.get('confirmPassword')
         role = data.get('role')
+        active=False
 
         if not username or not email or not password or not confirmPassword or not role:
             return jsonify({'status': False, 'msg': 'Incomplete data provided'}), 400
@@ -74,8 +75,11 @@ def signup():
             return jsonify({'status': False, 'msg': 'Password and confirm password do not match'}), 400
 
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-
-        user_id = collection.insert_one({'username': username,'email': email, 'password': hashed_password, 'role': role}).inserted_id
+        
+        if role == "admin":
+            user_id = collection.insert_one({'username': username,'email': email, 'password': hashed_password, 'role': role}).inserted_id
+        else:
+            user_id = collection.insert_one({'username': username,'email': email, 'password': hashed_password, 'role': role,'active': active}).inserted_id
 
         return jsonify({'status': True, 'msg': 'Registered successfully', 'user_id': str(user_id)}), 201
 
@@ -100,6 +104,9 @@ def login():
 
         user = collection.find_one({'email': email, 'role': role})
 
+        if(role=="patient"):
+            collection.update_one({'active': False}, {"$set": {'active': True}})
+
         if user and bcrypt.checkpw(password.encode('utf-8'), user['password']):
            
             return jsonify({'status': True, 'msg': 'Login successful','username':user['username']}), 200
@@ -110,6 +117,23 @@ def login():
     except Exception as e:
         return jsonify({'status': False, 'msg': str(e)}), 500
 
+
+'''************************************************  Logout Code  *******************************************************************'''
+@app.route('/signout', methods=['POST'])
+def signout():
+    try:
+        data = request.get_json()        
+        username = data.get('username')
+        role=data.get('role')     
+
+        if role == "patient":
+            patient_collection.update_many({'username': username}, {"$set": {'active': False}})
+            return jsonify({'status': True, 'msg': 'Logout successful'}), 200            
+        else:
+            return jsonify({'status': False, 'msg': 'Invalid role'}), 401
+
+    except Exception as e:
+        return jsonify({'status': False, 'msg': str(e)}), 500
 
 # Check and create 'aroledetail' collection
 admin_data_name = 'aroledetail'

@@ -138,7 +138,7 @@ function Register() {
 
    return (
       <div className="flex justify-center items-center h-max-80">
-         <form className="bg-white shadow-xl p-6 rounded-lg" onSubmit={handleSignup}>
+         <form className="bg-white shadow-xl p-6 rounded-lg">
             <h1 className="text-2xl mb-4">Register</h1>
             <div className="flex flex-wrap mb-4">
                <div className="w-full md:w-1/2 md:pr-2">
@@ -231,7 +231,7 @@ function Register() {
 
             <button
                className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600"
-               type="submit"
+               type="submit" onClick={handleSignup}
                disabled={loading}
             >
                {loading ? 'Signing up...' : 'Sign Up'}

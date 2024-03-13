@@ -23,6 +23,8 @@ import {
 } from './pages'
 import useLocalStorageState from 'use-local-storage-state'
 import { IoPersonCircleSharp } from 'react-icons/io5'
+import { logoutRoute } from './utils/APIRoutes'
+import axios from 'axios'
 
 function App() {
    return (
@@ -36,6 +38,7 @@ function MainComponent() {
    const [isLoggedIn, setIsLoggedIn] = useLocalStorageState(false)
    const [role, setRole] = useState('patient')
    const [username, setUsername] = useState(null)
+   const [activeStatus, setActiveStatus] = useState(false)
    const [dropdownVisible, setDropdownVisible] = useState(false)
 
    const navigate = useNavigate()
@@ -94,13 +97,26 @@ function MainComponent() {
    const handleLogin = () => {
       localStorage.setItem('isLoggedIn', 'true')
       setIsLoggedIn(true)
+      if(role ==='patient'){
+         localStorage.setItem('activeStatus', 'true')
+         setActiveStatus(true)
+      }
    }
 
    const handleLogout = () => {
+      axios.post(logoutRoute, {
+         username,            
+         role
+      })
       localStorage.setItem('isLoggedIn', 'false')
       localStorage.removeItem('userRole')
       localStorage.removeItem('userName')
-      setIsLoggedIn(false)
+      setIsLoggedIn(false)      
+      if(role ==='patient'){         
+         localStorage.removeItem('activeStatus')
+         setActiveStatus(false)
+         
+      }
    }
 
    const toggleDropdown = () => {
