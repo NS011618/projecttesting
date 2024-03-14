@@ -57,8 +57,12 @@ function MainComponent() {
 
    useEffect(() => {
       if (isLoggedIn && window.performance && window.performance.navigation.type !== window.performance.navigation.TYPE_RELOAD) {
-         if (role === 'admin') navigate('/admin-dashboard')
-         else navigate('/patient-dashboard')
+         if (role === 'admin'){
+            navigate('/admin-dashboard')            
+         } 
+         else{
+            navigate('/patient-dashboard')
+         } 
       } else if (!isLoggedIn && window.performance && window.performance.navigation.type !== window.performance.navigation.TYPE_RELOAD) {
          navigate('/login-page')
       }
@@ -100,23 +104,22 @@ function MainComponent() {
       if(role ==='patient'){
          localStorage.setItem('activeStatus', 'true')
          setActiveStatus(true)
-      }
+      }      
    }
 
    const handleLogout = () => {
-      axios.post(logoutRoute, {
-         username,            
-         role
-      })
+      if(role === 'patient'){   
+         axios.post(logoutRoute, {
+            username,            
+            role
+         })      
+         localStorage.removeItem('activeStatus')
+         setActiveStatus(false)         
+      }      
       localStorage.setItem('isLoggedIn', 'false')
       localStorage.removeItem('userRole')
       localStorage.removeItem('userName')
-      setIsLoggedIn(false)      
-      if(role ==='patient'){         
-         localStorage.removeItem('activeStatus')
-         setActiveStatus(false)
-         
-      }
+      setIsLoggedIn(false) 
    }
 
    const toggleDropdown = () => {

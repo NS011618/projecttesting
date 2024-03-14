@@ -26,12 +26,11 @@ const Login = ({ onLogin }) => {
    const handleLogin = async () => {
       try {
          setLoading(true)
-         const response = await axios.post(loginRoute, {       
+         const response = await axios.post(loginRoute, {
             email,
             password,
             role,
          })
-         console.log(response.data.username)
 
          if (response.status === 200) {
             setMessage('Login successful')
@@ -56,7 +55,7 @@ const Login = ({ onLogin }) => {
    return (
       <Container>
          <LoginForm>
-            <h1>Login</h1>        
+            <h1>Login</h1>
             <InputGroup>
                <label>Email:</label>
                <Input
@@ -88,7 +87,9 @@ const Login = ({ onLogin }) => {
                {loading ? 'Logging in...' : 'Log In'}
             </Button>
             {message && <Message>{message}</Message>}
-            <Link to="/">Don't have an account? <span className='text-blue-500'>Register</span></Link>
+            <Link to="/">
+               Don't have an account? <span className="text-blue-500">Register</span>
+            </Link>
          </LoginForm>
       </Container>
    )

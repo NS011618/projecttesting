@@ -10,4 +10,4 @@ export const getSymptomsRoute = `${host}/getsymptoms`;
 export const gethistory = `${host}/getpastdata`;
 export const predictAndSuggestRoute = `${host}/predictandsuggest`;
 /* Admin Dashboard routes */ 
-export const totalpatients = `${host}/gettotalpatients`;
+export const Admindash = `${host}/admindash`;

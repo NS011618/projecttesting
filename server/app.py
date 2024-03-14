@@ -350,9 +350,9 @@ def get_past_history():
 
 
 
-@app.route('/gettotalpatients', methods=['GET'])
+@app.route('/admindash', methods=['GET'])
 @cross_origin(supports_credentials=True)
-def get_total_patients():
+def get_admin_dash():
     try:
         # Count the total number of documents in the 'prole' collection
         total_patients = patient_collection.count_documents({})
