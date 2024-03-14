@@ -356,8 +356,14 @@ def get_admin_dash():
     try:
         # Count the total number of documents in the 'prole' collection
         total_patients = patient_collection.count_documents({})
+        
+        # Fetch active status from all records
+        active_statuses = [patient['active'] for patient in patient_collection.find({}, {'active': True, '_id': 0})]
 
-        return jsonify({'total_patients': total_patients}), 200
+        # Calculate the number of active patients
+        active_patients = sum(active_statuses)
+
+        return jsonify({'total_patients': total_patients, 'active_patients': active_patients}), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500

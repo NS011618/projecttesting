@@ -40,8 +40,10 @@ const Login = ({ onLogin }) => {
             onLogin() // Notify the parent component about the successful login
             if (role === 'admin') {
                navigate('/admin-dashboard')
+               window.location.reload();
             } else {
                navigate('/patient-dashboard')
+               window.location.reload();
             }
          }
       } catch (error) {

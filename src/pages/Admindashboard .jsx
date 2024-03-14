@@ -14,6 +14,7 @@ const Admindashboard = () => {
    const [userRole, setUserRole] = useState(null)
    const [username, setUsername] = useState(null)
    const [totalPatients, setTotalPatients] = useState(0)
+   const [activePatients, setActivePatients] = useState(0)
 
    useEffect(() => {
       const storedRole = localStorage.getItem('userRole')
@@ -34,6 +35,8 @@ const Admindashboard = () => {
             }
          }).then((res) => res.json())
          setTotalPatients(response.total_patients) 
+         setActivePatients(response.active_patients)
+         console.log(response)
       }
       gettotal()
    }
@@ -50,6 +53,11 @@ const Admindashboard = () => {
             <div className="md:w-1/5 p-4">
                <UserCard username={username} userRole={userRole} />
                <div className="bg-gray-900/25 rounded-md shadow-inner h-1 w-78"></div>
+               <br />
+               <div className="bg-white/40 rounded-md shadow-inner p-4">
+                  <h1 className="text-2xl font-semibold text-center text-gray-800 mb-2">Active Patients</h1>
+                  <div className="text-4xl font-semibold text-center text-teal-800">{activePatients}</div>
+               </div>
                <br />
                <div className="bg-white/40 rounded-md shadow-inner p-4">
                   <h1 className="text-2xl font-semibold text-center text-gray-800 mb-2">Total Patients</h1>

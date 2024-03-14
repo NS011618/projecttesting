@@ -2,15 +2,7 @@
 /* eslint-disable no-unused-vars */
 import './App.css'
 import React, { useEffect, useState } from 'react'
-import {
-   BrowserRouter,
-   Link,
-   Route,
-   Routes,
-   Outlet,
-   Navigate,
-   useNavigate,
-} from 'react-router-dom'
+import { BrowserRouter, Link, Route, Routes, Outlet, Navigate } from 'react-router-dom'
 import {
    About,
    Contact,
@@ -38,10 +30,7 @@ function MainComponent() {
    const [isLoggedIn, setIsLoggedIn] = useLocalStorageState(false)
    const [role, setRole] = useState('patient')
    const [username, setUsername] = useState(null)
-   const [activeStatus, setActiveStatus] = useState(false)
    const [dropdownVisible, setDropdownVisible] = useState(false)
-
-   const navigate = useNavigate()
 
    useEffect(() => {
       const storedLoginStatus = localStorage.getItem('isLoggedIn')
@@ -54,20 +43,6 @@ function MainComponent() {
          setUsername(storedName)
       }
    }, [])
-
-   useEffect(() => {
-      if (isLoggedIn && window.performance && window.performance.navigation.type !== window.performance.navigation.TYPE_RELOAD) {
-         if (role === 'admin'){
-            navigate('/admin-dashboard')            
-         } 
-         else{
-            navigate('/patient-dashboard')
-         } 
-      } else if (!isLoggedIn && window.performance && window.performance.navigation.type !== window.performance.navigation.TYPE_RELOAD) {
-         navigate('/login-page')
-      }
-}, [isLoggedIn])
-
 
    useEffect(() => {
       const checkLoginStatus = () => {
@@ -101,31 +76,29 @@ function MainComponent() {
    const handleLogin = () => {
       localStorage.setItem('isLoggedIn', 'true')
       setIsLoggedIn(true)
-      if(role ==='patient'){
-         localStorage.setItem('activeStatus', 'true')
-         setActiveStatus(true)
-      }      
+      if (role === 'patient') {
+         localStorage.setItem('activeStatus', 'true')        
+      }
    }
 
    const handleLogout = () => {
-      if(role === 'patient'){   
+      if (role === 'patient') {
          axios.post(logoutRoute, {
-            username,            
-            role
-         })      
+            username,
+            role,
+         })
          localStorage.removeItem('activeStatus')
-         setActiveStatus(false)         
-      }      
+      }
       localStorage.setItem('isLoggedIn', 'false')
       localStorage.removeItem('userRole')
       localStorage.removeItem('userName')
-      setIsLoggedIn(false) 
+      setIsLoggedIn(false)
    }
 
    const toggleDropdown = () => {
       setDropdownVisible(!dropdownVisible)
    }
-   
+
    return (
       <>
          <header className="w-full flex justify-between sm:px-8 px-5 py-4 border-b border-b-[#e6ebf4] bg-teal-600/35 shadow-lg">
@@ -189,7 +162,7 @@ function MainComponent() {
                                           Input Data
                                        </Link>
                                     </>
-                                 )}                               
+                                 )}
 
                                  <button
                                     onClick={handleLogout}
