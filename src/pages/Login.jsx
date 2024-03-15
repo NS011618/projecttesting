@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
@@ -84,7 +85,7 @@ const Login = ({ onLogin }) => {
                   <option value="admin">Admin</option>
                   <option value="patient">Patient</option>
                </select>
-            </InputGroup>
+            </InputGroup>            
             <Button onClick={handleLogin} disabled={loading}>
                {loading ? 'Logging in...' : 'Log In'}
             </Button>
