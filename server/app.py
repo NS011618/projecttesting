@@ -177,7 +177,8 @@ def receive_and_save_data():
     except Exception as e:
         return jsonify({'message': f'Error: {str(e)}'}), 500
 
-
+query_collection_name = 'querydb'
+query_collection = mongo.db[query_collection_name]
 '''*****************************************************Contact us Code**************************************************************************'''
 @app.route('/contact', methods=['POST'])
 def contact():
@@ -189,11 +190,27 @@ def contact():
         msg.body = f"Name: {data['first_name']} {data['last_name']}\nEmail: {data['email']}\nMessage: {data['message']}\n\nRaw Form Data:\n{data}"
 
         mail.send(msg)
-
+        # Save the message to the database
+        
+        new_message = {
+            'first_name': data['first_name'],
+            'last_name': data['last_name'],
+            'email': data['email'],
+            'message': data['message']
+        }
+        query_collection.insert_one(new_message)
         return jsonify({'message': 'Message sent successfully'})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/messages', methods=['GET'])
+def get_messages():
+    try:        
+        messages = query_collection.find({}, {'_id': False})
+        message_list = [message for message in messages]
+        return jsonify(message_list)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # Check and create 'symptomdetail' collection
 symptom_data_name = 'symptomdetail'
@@ -430,10 +447,10 @@ def predict_and_suggest():
         symptoms = data.get('symptoms', [])
         disease = data.get('disease', '')
 
-        # Generate suggestions using OpenAI's GPT-3
+        # Generate suggestions using OpenAI's Transformer GPT-3 Model
         prompt = f"Given the symptoms: {', '.join(symptoms)} and the disease: {disease}, suggest medication and nutrient diet."
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo-0125",  # Use the latest GPT-3 engine
+            model="gpt-3.5-turbo-0125",  # Using the latest GPT-3 Transformer engine
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": prompt}
